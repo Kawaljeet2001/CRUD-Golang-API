@@ -9,6 +9,7 @@ import (
 )
 
 var Client *mongo.Client
+var MoviesCollection *mongo.Collection
 
 func DBInstance(ctx context.Context) {
 
@@ -27,7 +28,7 @@ func DBInstance(ctx context.Context) {
 	log.Println("Connected to Database Successfully!")
 
 	Client = client
-
+	MoviesCollection = client.Database("my-database").Collection("movies")
 	// // <-ctx.Done()
 	// if err := client.Disconnect(context.TODO()); err != nil {
 	// 	panic(err)

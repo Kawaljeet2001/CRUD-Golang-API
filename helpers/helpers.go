@@ -11,11 +11,8 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-var db = database.Client.Database("my-database")
-var moviescollection = db.Collection("movies")
-
 func CreateMovie(movie model.Netflix) {
-	result, err := moviescollection.InsertOne(context.Background(), movie)
+	result, err := database.MoviesCollection.InsertOne(context.Background(), movie)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -31,7 +28,7 @@ func UpdateMovieById(movieId string) {
 
 	filter := bson.M{"_id": mId}
 	update := bson.M{"$set": bson.M{"watched": true}}
-	result, err := moviescollection.UpdateOne(context.Background(), filter, update)
+	result, err := database.MoviesCollection.UpdateOne(context.Background(), filter, update)
 
 	if err != nil {
 		log.Fatal(err)
@@ -45,7 +42,7 @@ func DeleteMovieById(movieId string) {
 		log.Fatal(err)
 	}
 	filter := bson.M{"_id": mId}
-	result, err := moviescollection.DeleteOne(context.Background(), filter)
+	result, err := database.MoviesCollection.DeleteOne(context.Background(), filter)
 
 	if err != nil {
 		log.Fatal(err)
@@ -55,7 +52,7 @@ func DeleteMovieById(movieId string) {
 }
 
 func DeleteAllMovies() {
-	result, err := moviescollection.DeleteMany(context.Background(), bson.D{{}})
+	result, err := database.MoviesCollection.DeleteMany(context.Background(), bson.D{{}})
 
 	if err != nil {
 		log.Fatal(err)
@@ -64,14 +61,14 @@ func DeleteAllMovies() {
 	fmt.Println("Deleted all elements,: ", result.DeletedCount)
 }
 
-func GetAllMovies() []primitive.M {
-	cursor, err := moviescollection.Find(context.Background(), bson.M{})
+func GetAllMovies() []bson.M {
+	cursor, err := database.MoviesCollection.Find(context.Background(), bson.D{{}})
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	var movies []primitive.M
+	var movies []bson.M
 
 	for cursor.Next(context.Background()) {
 		var movie bson.M

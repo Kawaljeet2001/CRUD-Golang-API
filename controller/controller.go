@@ -2,6 +2,7 @@ package controller
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -9,6 +10,10 @@ import (
 	"github.com/Kawaljeet2001/netflix-api/model"
 	"github.com/gorilla/mux"
 )
+
+func ServeHomeController(w http.ResponseWriter, r *http.Request) {
+	json.NewEncoder(w).Encode("The Netflix-clone server is up and running!")
+}
 
 func GetAllMoviesController(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
@@ -26,6 +31,7 @@ func CreateMovieController(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&createdMovie)
 
 	if err != nil {
+		fmt.Println("The error has occurred in decoding the user sent data while creating!")
 		log.Fatal(err)
 	}
 	helpers.CreateMovie(createdMovie)
@@ -46,6 +52,7 @@ func DeleteMovieByIdController(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Allow-Control-Allow-Methods", "DELETE")
 	params := mux.Vars(r)
+
 	helpers.DeleteMovieById(params["movieId"])
 
 	responseObject := make(map[string]string)
@@ -55,14 +62,15 @@ func DeleteMovieByIdController(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(responseObject)
 }
 
-func DeleteAllMoviesEncoder(w http.ResponseWriter, r *http.Request) {
+func DeleteAllMoviesController(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Allow-Control-Allow-Methods", "DELETE")
+
 	helpers.DeleteAllMovies()
 
 	responseObject := make(map[string]string)
 
-	responseObject["message"] = "Deleted all movies successfully"
+	responseObject["message"] = "Deleted all movies successfully: "
 	json.NewEncoder(w).Encode(responseObject)
 
 }
