@@ -9,7 +9,7 @@ This project is a simple CRUD API, for a netflix-like web app. The database used
 - Clone the repo
 
   ```bash
-    git clone https://github.com/Kawaljeet2001/
+    git clone https://github.com/Kawaljeet2001/CRUD-Golang-API.git
   ```
 
 - Create your ```.env``` file and add the ```MONGODB_URI``` and ```PORT```  environment variables.
