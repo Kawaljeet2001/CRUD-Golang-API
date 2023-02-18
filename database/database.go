@@ -3,7 +3,9 @@ package database
 import (
 	"context"
 	"log"
+	"os"
 
+	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -12,9 +14,12 @@ var Client *mongo.Client
 var MoviesCollection *mongo.Collection
 
 func DBInstance(ctx context.Context) {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading the .env file")
 
-	// mongodb_uri := os.Getenv("MONGODB_URI")
-	mongodb_uri := "mongodb+srv://batrakawaljeetsingh:kawaljeet5822@cluster0.skc2z70.mongodb.net/?retryWrites=true&w=majority"
+	}
+	mongodb_uri := os.Getenv("MONGODB_URI")
 	if mongodb_uri == "" {
 		log.Fatal("Error: not able to load MONGODB_URI")
 	}
